@@ -27,13 +27,14 @@ class ViewController: UIViewController {
     
     
     /*----------------------Variables----------------------*/
-    var numbersArray : [Double] = [0]
+    var numbersArray : [(num : Double, sign : Bool)] = [(0,true)]
     var numbersStringArray : [String] = ["0"]
     var operatorsArray : [Operators] = []
     var inputText : String = "0"
     var numberExist : Bool = false
     var pointExist : Bool = false
     var operatorExist : Bool = false
+    var currentSign : Bool = true
     
     
     
@@ -46,12 +47,16 @@ class ViewController: UIViewController {
     
     /*----------------------Main Operations!----------------------*/
     @IBAction func clearAll(_ sender: UIButton) {
-        inputLable.text?.removeAll(); inputLable.text = "0"
+        inputLable.text = "0"
         resultLable.text?.removeAll()
-        numbersArray.removeAll(); numbersArray = [0]
-        operatorsArray.removeAll(); operatorsArray = []
+        numbersArray = [(0,true)]
+        operatorsArray = []
+        numbersStringArray = ["0"]
         inputText = "0"
-        numberExist = false; pointExist = false; operatorExist = false
+        numberExist = false
+        pointExist = false
+        operatorExist = false
+        currentSign = true
     }
     
     @IBAction func calculateBtn(_ sender: UIButton) {
@@ -62,6 +67,14 @@ class ViewController: UIViewController {
     
     /*----------------------Operators----------------------*/
     @IBAction func mainMathOperators(_ sender: UIButton) {
+        //put ")" when number is negetive
+        if !numberExist && !currentSign {
+            return
+        }
+        if !currentSign {
+            inputText += ")"
+        }
+        
         //check if op exist
         if operatorExist {
             //we are going to replace last 3 chars
@@ -75,7 +88,7 @@ class ViewController: UIViewController {
         //reset variables
         numberExist = false
         pointExist = false
-        
+        currentSign = true
         
         //get number that clicked
         guard let inputString : String = sender.titleLabel?.text else {return}
@@ -92,6 +105,35 @@ class ViewController: UIViewController {
     }
     
     @IBAction func signBtn(_ sender: Any) {
+        //if number didn't exist so we should add "(-" to label
+        if !numberExist {
+            if currentSign {
+                if inputText == "0" {
+                    inputText = ""
+                }
+                inputText += "(-"
+            } else {
+                inputText = String(inputText.prefix(inputText.count - 2))
+            }
+        } else {
+            guard let numberString = numbersStringArray.last else {return}
+            let numberTuple = numbersArray.removeLast()
+            
+            //delete and fix
+            if numberTuple.sign {
+                inputText = inputText.prefix(inputText.count - numberString.count) + "(-" + numberString
+                numbersArray.append((numberTuple.num,false))
+            } else {
+                inputText = inputText.prefix(inputText.count - numberString.count - 2) + numberString
+                numbersArray.append((numberTuple.num,true))
+            }
+        }
+        
+        reCalculate()
+        currentSign = !currentSign
+        
+        //set label
+        inputLable.text = inputText
     }
     
     @IBAction func percentBtn(_ sender: UIButton) {
@@ -131,7 +173,7 @@ class ViewController: UIViewController {
         
         //push back new value
         numbersStringArray.append(newNumberString)
-        numbersArray.append(Double(newNumberString)!)
+        numbersArray.append((Double(newNumberString)! , currentSign))
         
         //change input based on new number
         inputText = inputText.prefix(inputText.count - numberString.count) + newNumberString
@@ -143,6 +185,8 @@ class ViewController: UIViewController {
         reCalculate()
     }
     
+    
+    /*----------------------Calculate Logic----------------------*/
     func reCalculate(){
         //set lable with new input
         inputLable.text = inputText
@@ -151,7 +195,7 @@ class ViewController: UIViewController {
         if (numbersArray.count) > 1 && numberExist {
             
             //clone arrays to calculate
-            var numbersArrayTemp : [Double] = numbersArray
+            var numbersArrayTemp : [(num : Double, sign : Bool)] = numbersArray
             var operatorsArrayTemp : [Operators] = operatorsArray
             
             //search for * and / from left
@@ -161,9 +205,13 @@ class ViewController: UIViewController {
                     
                     //get number and operators from left
                     let currentOP : Operators = operatorsArrayTemp.remove(at: index)
-                    let num1 : Double = numbersArrayTemp.remove(at: index)
-                    let num2 : Double = numbersArrayTemp.remove(at: index)
+                    let num1Tuple = numbersArrayTemp.remove(at: index)
+                    let num2Tuple = numbersArrayTemp.remove(at: index)
                     let result : Double
+                    
+                    //fix number sign
+                    let num1 : Double = num1Tuple.sign ? num1Tuple.num : -num1Tuple.num
+                    let num2 : Double = num2Tuple.sign ? num2Tuple.num : -num2Tuple.num
                     
                     //lets calculate result
                     switch currentOP {
@@ -173,7 +221,7 @@ class ViewController: UIViewController {
                     }
                     
                     //push back result
-                    numbersArrayTemp.insert(result, at: index)
+                    numbersArrayTemp.insert((abs(result), result < 0 ? false : true) , at: index)
                     index -= 1
                 }
                 index += 1
@@ -186,9 +234,13 @@ class ViewController: UIViewController {
 
                     //get number and operators from left
                     let currentOP : Operators = operatorsArrayTemp.remove(at: index)
-                    let num1 : Double = numbersArrayTemp.remove(at: index)
-                    let num2 : Double = numbersArrayTemp.remove(at: index)
+                    let num1Tuple = numbersArrayTemp.remove(at: index)
+                    let num2Tuple = numbersArrayTemp.remove(at: index)
                     let result : Double
+                    
+                    //fix number sign
+                    let num1 : Double = num1Tuple.sign ? num1Tuple.num : -num1Tuple.num
+                    let num2 : Double = num2Tuple.sign ? num2Tuple.num : -num2Tuple.num
 
                     //lets calculate result
                     switch currentOP {
@@ -198,14 +250,15 @@ class ViewController: UIViewController {
                     }
 
                     //push back result
-                    numbersArrayTemp.insert(result, at: index)
+                    numbersArrayTemp.insert((abs(result), result < 0 ? false : true ), at: index)
                     index -= 1
                 }
                 index += 1
             }
             
             //set result
-            resultLable.text = String(numbersArrayTemp.removeFirst())
+            let resultTuple = numbersArrayTemp.removeFirst()
+            resultLable.text = String(resultTuple.sign ? resultTuple.num : -resultTuple.num)
             
         }
         
