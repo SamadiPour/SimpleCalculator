@@ -33,6 +33,7 @@ class ViewController: UIViewController {
     var inputText : String = "0"
     var numberExist : Bool = false
     var pointExist : Bool = false
+    var operatorExist : Bool = false
     
     
     
@@ -54,10 +55,20 @@ class ViewController: UIViewController {
     
     /*----------------------Operators----------------------*/
     @IBAction func mainMathOperators(_ sender: UIButton) {
+        //check if op exist
+        if operatorExist {
+            //we are going to replace last 3 chars
+            inputText = String(inputText.dropLast(3))
+            operatorsArray.removeLast()
+        } else {
+            operatorExist = true
+            numbersStringArray.append("")
+        }
+        
         //reset variables
         numberExist = false
         pointExist = false
-        numbersStringArray.append("")
+        
         
         //get number that clicked
         guard let inputString : String = sender.titleLabel?.text else {return}
@@ -119,6 +130,7 @@ class ViewController: UIViewController {
         print(numberString, ":", inputText)
         
         //re calculate whole input
+        operatorExist = false
         numberExist = true
         reCalculate()
     }
