@@ -46,6 +46,12 @@ class ViewController: UIViewController {
     
     /*----------------------Main Operations!----------------------*/
     @IBAction func clearAll(_ sender: UIButton) {
+        inputLable.text?.removeAll(); inputLable.text = "0"
+        resultLable.text?.removeAll()
+        numbersArray.removeAll(); numbersArray = [0]
+        operatorsArray.removeAll(); operatorsArray = [Operators.plus]
+        inputText = "0"
+        numberExist = false; pointExist = false; operatorExist = false
     }
     
     @IBAction func calculateBtn(_ sender: UIButton) {
