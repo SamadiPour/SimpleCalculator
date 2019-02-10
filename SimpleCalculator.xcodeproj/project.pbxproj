@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		87712D94220F235800B314EB /* OpenSansBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 87712D92220F235700B314EB /* OpenSansBold.ttf */; };
+		87712D95220F235800B314EB /* OpenSansRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 87712D93220F235700B314EB /* OpenSansRegular.ttf */; };
 		87ED7D1B220EEC80000138A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87ED7D1A220EEC80000138A1 /* AppDelegate.swift */; };
 		87ED7D1D220EEC80000138A1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87ED7D1C220EEC80000138A1 /* ViewController.swift */; };
 		87ED7D20220EEC80000138A1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87ED7D1E220EEC80000138A1 /* Main.storyboard */; };
@@ -34,6 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		87712D92220F235700B314EB /* OpenSansBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = OpenSansBold.ttf; sourceTree = "<group>"; };
+		87712D93220F235700B314EB /* OpenSansRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = OpenSansRegular.ttf; sourceTree = "<group>"; };
 		87ED7D17220EEC80000138A1 /* SimpleCalculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleCalculator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		87ED7D1A220EEC80000138A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		87ED7D1C220EEC80000138A1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -97,6 +101,8 @@
 		87ED7D19220EEC80000138A1 /* SimpleCalculator */ = {
 			isa = PBXGroup;
 			children = (
+				87712D92220F235700B314EB /* OpenSansBold.ttf */,
+				87712D93220F235700B314EB /* OpenSansRegular.ttf */,
 				87ED7D1A220EEC80000138A1 /* AppDelegate.swift */,
 				87ED7D1C220EEC80000138A1 /* ViewController.swift */,
 				87ED7D1E220EEC80000138A1 /* Main.storyboard */,
@@ -229,7 +235,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87712D94220F235800B314EB /* OpenSansBold.ttf in Resources */,
 				87ED7D25220EEC85000138A1 /* LaunchScreen.storyboard in Resources */,
+				87712D95220F235800B314EB /* OpenSansRegular.ttf in Resources */,
 				87ED7D22220EEC85000138A1 /* Assets.xcassets in Resources */,
 				87ED7D20220EEC80000138A1 /* Main.storyboard in Resources */,
 			);
