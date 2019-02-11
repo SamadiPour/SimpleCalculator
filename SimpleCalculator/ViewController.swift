@@ -13,6 +13,7 @@ extension Double {
     func rounded(toPlaces places:Int) -> Double {
         let divisor = pow(10.0, Double(places))
         return (self * divisor).rounded() / divisor
+        
     }
 }
 
@@ -20,7 +21,7 @@ extension Double {
 class ViewController: UIViewController {
 
     /*----------------------Labels----------------------*/
-    @IBOutlet weak var inputLable: UILabel!
+    @IBOutlet weak var inputTextView: UITextView!
     @IBOutlet weak var resultLable: UILabel!
     
     
@@ -51,13 +52,17 @@ class ViewController: UIViewController {
     /*----------------------Main Function----------------------*/
     override func viewDidLoad() {
         super.viewDidLoad()
+        inputTextView.textContainer.maximumNumberOfLines = 1
+        inputTextView.invalidateIntrinsicContentSize()
+        inputTextView.textContainer.lineBreakMode = .byTruncatingHead
+        inputTextView.isScrollEnabled = true
     }
     
     
     
     /*----------------------Main Operations!----------------------*/
     @IBAction func clearAll(_ sender: UIButton) {
-        inputLable.text = "0"
+        inputTextView.text = "0"
         resultLable.text?.removeAll()
         numbersArray = [(0,true)]
         operatorsArray = []
@@ -93,7 +98,7 @@ class ViewController: UIViewController {
         
         //set input with result
         inputText = result
-        inputLable.text = result
+        inputTextView.text = result
         
         //add result as input to elements
         let number : Double = Double(result)!
@@ -142,7 +147,7 @@ class ViewController: UIViewController {
         inputText += " " + inputString + " "
         
         //set lable with new input
-        inputLable.text = inputText
+        inputTextView.text = inputText
         
         //find operator and add it to array
         guard let ops : Operators = Operators.init(rawValue: inputString) else {return}
@@ -178,7 +183,7 @@ class ViewController: UIViewController {
         currentSign = !currentSign
         
         //set label
-        inputLable.text = inputText
+        inputTextView.text = inputText
     }
     
     @IBAction func percentBtn(_ sender: UIButton) {
@@ -209,7 +214,7 @@ class ViewController: UIViewController {
         
         //set text and recalculate
         percentExist = true
-        inputLable.text = inputText
+        inputTextView.text = inputText
         reCalculate()
         
     }
@@ -264,7 +269,7 @@ class ViewController: UIViewController {
     /*----------------------Calculate Logic----------------------*/
     func reCalculate(){
         //set lable with new input
-        inputLable.text = inputText
+        inputTextView.text = inputText
         
         //if we have 2 number in our list and we are sure that next number is entered then calculate result
         if (numbersArray.count > 1 && numberExist) || (percentExist && numberExist) {
@@ -338,7 +343,11 @@ class ViewController: UIViewController {
             //set result
             let resultTuple = numbersArrayTemp.removeFirst()
             let result = resultTuple.sign ? resultTuple.num : -resultTuple.num
-            resultLable.text = result.significandWidth == 0 ? String(String(result).dropLast(2)) : String(result)
+            var resultString = String(result)
+            if resultString.contains(".") {
+                resultString = String(resultString.split(separator: ".")[1]) == "0" ? String(resultString.dropLast(2)) : resultString
+            }
+            resultLable.text = resultString
         }
         
     }
