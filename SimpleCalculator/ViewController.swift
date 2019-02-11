@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  SimpleCalculator
 //
-//  Created by Amir Hossein on 2/9/19.
-//  Copyright © 2019 Amir Hossein. All rights reserved.
+//  Created by Amir Hossein & Alireza.Az on 2/9/19.
+//  Copyright © 2019 Alireza.Az and Amir Hossein All rights reserved.
 //
 
 import UIKit
