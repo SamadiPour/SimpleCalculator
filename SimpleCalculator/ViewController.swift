@@ -340,7 +340,6 @@ class ViewController: UIViewController {
             let resultTuple = numbersArrayTemp.removeFirst()
             let result = resultTuple.sign ? resultTuple.num : -resultTuple.num
             resultLable.text = result.significandWidth == 0 ? String(String(result).dropLast(2)) : String(result)
-            
         }
         
     }
