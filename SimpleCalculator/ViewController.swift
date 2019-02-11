@@ -48,7 +48,6 @@ class ViewController: UIViewController {
     
     
     
-    
     /*----------------------Main Function----------------------*/
     override func viewDidLoad() {
         super.viewDidLoad()
