@@ -9,7 +9,7 @@
 import UIKit
 
 extension Double {
-    /// Rounds the double to decimal places value
+    // Rounds the double to decimal places value
     func rounded(toPlaces places:Int) -> Double {
         let divisor = pow(10.0, Double(places))
         return (self * divisor).rounded() / divisor
@@ -72,18 +72,50 @@ class ViewController: UIViewController {
     }
     
     @IBAction func calculateBtn(_ sender: UIButton) {
-    
+        //if the last entered was operator and there wasn't any number after that
+        if (operatorExist && !numberExist){
+            operatorsArray.removeLast()
+            reCalculate()
+        }
         
+        // if we have only one number
+        if (numbersArray.count < 2){
+            return
+        }
+        
+        //show the last calculated result a the last result :D
+        let result : String = resultLable.text ?? "0"
+        
+        //remove and clear
+        resultLable.text?.removeAll()
+        numbersArray = []
+        operatorsArray = []
+        numbersStringArray = []
+        
+        //set input with result
+        inputText = result
+        inputLable.text = result
+        
+        //add result as input to elements
+        let number : Double = Double(result)!
+        currentSign = number >= 0
+        numberExist = true
+        numbersArray.append((num: abs(number), sign: currentSign))
+        let numbersString : String = currentSign ? result : "(-" + result.dropFirst()
+        pointExist = numbersString.contains(".")
+        numbersStringArray.append(numbersString)
     }
     
     
     
     /*----------------------Operators----------------------*/
     @IBAction func mainMathOperators(_ sender: UIButton) {
-        //put ")" when number is negetive
+        //don't put operator after negetive sign without number
         if !numberExist && !currentSign {
             return
         }
+        
+        //put ")" when number is negetive
         if !currentSign {
             inputText += ")"
         }
