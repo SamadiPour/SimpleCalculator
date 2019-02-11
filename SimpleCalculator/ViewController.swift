@@ -8,6 +8,15 @@
 
 import UIKit
 
+extension Double {
+    /// Rounds the double to decimal places value
+    func rounded(toPlaces places:Int) -> Double {
+        let divisor = pow(10.0, Double(places))
+        return (self * divisor).rounded() / divisor
+    }
+}
+
+
 class ViewController: UIViewController {
 
     /*----------------------Labels----------------------*/
@@ -35,6 +44,8 @@ class ViewController: UIViewController {
     var pointExist : Bool = false
     var operatorExist : Bool = false
     var currentSign : Bool = true
+    var percentExist : Bool = false
+    
     
     
     
@@ -57,9 +68,11 @@ class ViewController: UIViewController {
         pointExist = false
         operatorExist = false
         currentSign = true
+        percentExist = false
     }
     
     @IBAction func calculateBtn(_ sender: UIButton) {
+    
         
     }
     
@@ -89,6 +102,7 @@ class ViewController: UIViewController {
         numberExist = false
         pointExist = false
         currentSign = true
+        percentExist = false
         
         //get number that clicked
         guard let inputString : String = sender.titleLabel?.text else {return}
@@ -137,6 +151,35 @@ class ViewController: UIViewController {
     }
     
     @IBAction func percentBtn(_ sender: UIButton) {
+        //don't enter number after persent (just op)
+        if !numberExist {return}
+        
+        //lets get the last number to modify it
+        var number = numbersArray.removeLast()
+        number.num /= 100
+        
+        //fix input text
+        guard var numberString : String = numbersStringArray.removeLast() else {return}
+        inputText = String(inputText.prefix(inputText.count - numberString.count))
+        
+        //find if it has "." but no 0! (why the fuck?)
+        if numberString.last == "." {
+            numberString += "0"
+        }
+        inputText += numberString + "%"
+        
+        //push back number and it's string
+        var fixedNumber : Double = number.num
+        if numberString != String(fixedNumber){
+            fixedNumber = Double(String(number.num))!
+        }
+        numbersArray.append((fixedNumber , number.sign))
+        numbersStringArray.append(numberString)
+        
+        //set text and recalculate
+        percentExist = true
+        inputLable.text = inputText
+        reCalculate()
         
     }
     
@@ -144,6 +187,8 @@ class ViewController: UIViewController {
     
     /*----------------------Numbers And Point----------------------*/
     @IBAction func digitButtons(_ sender: UIButton) {
+        
+        if percentExist {return}
         //get number that clicked
         guard let inputString : String = sender.titleLabel?.text else {return}
         
@@ -173,11 +218,10 @@ class ViewController: UIViewController {
         
         //push back new value
         numbersStringArray.append(newNumberString)
-        numbersArray.append((Double(newNumberString)! , currentSign))
+        numbersArray.append((Double(String(newNumberString))! , currentSign))
         
         //change input based on new number
         inputText = inputText.prefix(inputText.count - numberString.count) + newNumberString
-        print(numberString, ":", inputText)
         
         //re calculate whole input
         operatorExist = false
@@ -192,7 +236,7 @@ class ViewController: UIViewController {
         inputLable.text = inputText
         
         //if we have 2 number in our list and we are sure that next number is entered then calculate result
-        if (numbersArray.count) > 1 && numberExist {
+        if (numbersArray.count > 1 && numberExist) || (percentExist && numberExist) {
             
             //clone arrays to calculate
             var numbersArrayTemp : [(num : Double, sign : Bool)] = numbersArray
@@ -220,9 +264,13 @@ class ViewController: UIViewController {
                     default: return
                     }
                     
-                    //push back result
-                    numbersArrayTemp.insert((abs(result), result < 0 ? false : true) , at: index)
-                    index -= 1
+                    //fix double point
+                    let resultString = String(result)
+                    if let fixedResult = Double(resultString){
+                        //push back result
+                        numbersArrayTemp.insert((abs(result.rounded(toPlaces: 8)), fixedResult < 0 ? false : true) , at: index)
+                        index -= 1
+                    }
                 }
                 index += 1
             }
@@ -250,7 +298,7 @@ class ViewController: UIViewController {
                     }
 
                     //push back result
-                    numbersArrayTemp.insert((abs(result), result < 0 ? false : true ), at: index)
+                    numbersArrayTemp.insert((abs(result.rounded(toPlaces: 8)), result < 0 ? false : true ), at: index)
                     index -= 1
                 }
                 index += 1
@@ -258,7 +306,8 @@ class ViewController: UIViewController {
             
             //set result
             let resultTuple = numbersArrayTemp.removeFirst()
-            resultLable.text = String(resultTuple.sign ? resultTuple.num : -resultTuple.num)
+            let result = resultTuple.sign ? resultTuple.num : -resultTuple.num
+            resultLable.text = result.significandWidth == 0 ? String(String(result).dropLast(2)) : String(result)
             
         }
         
