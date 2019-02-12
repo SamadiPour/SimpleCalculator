@@ -20,10 +20,17 @@ extension Double {
 
 class ViewController: UIViewController {
 
-    /*----------------------Labels----------------------*/
+    /*----------------------UI----------------------*/
     @IBOutlet weak var inputTextView: UITextView!
     @IBOutlet weak var resultLable: UILabel!
-    
+    @IBOutlet weak var firstRowStack: UIStackView!
+    @IBOutlet weak var secondRowStack: UIStackView!
+    @IBOutlet weak var thirdRowStack: UIStackView!
+    @IBOutlet weak var fourthRowStack: UIStackView!
+    @IBOutlet weak var fifthRowStack: UIStackView!
+    @IBOutlet weak var numpadStack: UIStackView!
+    @IBOutlet weak var topStack: UIStackView!
+    @IBOutlet weak var theRedLine: UIProgressView!
     
     
     /*----------------------operator enum----------------------*/
@@ -32,6 +39,128 @@ class ViewController: UIViewController {
         case minus = "-"
         case divide = "/"
         case multiply = "*"
+    }
+    
+    
+    /*----------------------Variables----------------------*/
+    fileprivate func setupLayout (){
+        
+        topStack.translatesAutoresizingMaskIntoConstraints = false
+        topStack.distribution = .fillEqually
+        topStack.axis = .vertical
+        
+        NSLayoutConstraint.activate([
+            topStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 5),
+            topStack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -25),
+            topStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//            topStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15),
+            topStack.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.4),
+            topStack.bottomAnchor.constraint(equalTo: theRedLine.topAnchor , constant: -10),
+//            topStack.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.3)
+            topStack.heightAnchor.constraint(lessThanOrEqualToConstant: 50)
+            ])
+        
+        
+        
+        inputTextView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            inputTextView.leadingAnchor.constraint(equalTo: topStack.leadingAnchor),
+//            inputTextView.trailingAnchor.constraint(equalTo: topStack.trailingAnchor, constant: -25),
+            inputTextView.widthAnchor.constraint(equalTo: topStack.widthAnchor),
+//            inputTextView.heightAnchor.constraint(lessThanOrEqualToConstant: 25)
+            ])
+        
+        
+        
+        resultLable.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            resultLable.leadingAnchor.constraint(equalTo: topStack.leadingAnchor),
+//            resultLable.trailingAnchor.constraint(equalTo: topStack.trailingAnchor, constant: -25),
+            resultLable.widthAnchor.constraint(equalTo: topStack.widthAnchor),
+//            inputTextView.heightAnchor.constraint(lessThanOrEqualToConstant: 25)
+            ])
+        
+        
+        
+        theRedLine.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            theRedLine.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor , constant: 10),
+            theRedLine.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor , constant: -10),
+            theRedLine.bottomAnchor.constraint(equalTo: numpadStack.topAnchor, constant: -10)
+            ])
+        
+        
+        
+        numpadStack.translatesAutoresizingMaskIntoConstraints = false
+        numpadStack.distribution = .fillEqually
+        numpadStack.axis = .vertical
+        
+        NSLayoutConstraint.activate([
+            numpadStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30),
+            numpadStack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30),
+            numpadStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            numpadStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -25),
+            numpadStack.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5)
+            ])
+        
+        
+        
+        firstRowStack.translatesAutoresizingMaskIntoConstraints = false
+        firstRowStack.distribution = .fillEqually
+        
+        NSLayoutConstraint.activate([
+            firstRowStack.leadingAnchor.constraint(equalTo: numpadStack.leadingAnchor),
+            firstRowStack.trailingAnchor.constraint(equalTo: numpadStack.trailingAnchor),
+            firstRowStack.widthAnchor.constraint(equalTo: numpadStack.widthAnchor)
+            ])
+        
+        
+        
+        secondRowStack.translatesAutoresizingMaskIntoConstraints = false
+        secondRowStack.distribution = .fillEqually
+
+        NSLayoutConstraint.activate([
+            secondRowStack.leadingAnchor.constraint(equalTo: numpadStack.leadingAnchor),
+            secondRowStack.trailingAnchor.constraint(equalTo: numpadStack.trailingAnchor),
+            secondRowStack.widthAnchor.constraint(equalTo: numpadStack.widthAnchor)
+            ])
+
+
+
+        thirdRowStack.translatesAutoresizingMaskIntoConstraints = false
+        thirdRowStack.distribution = .fillEqually
+
+        NSLayoutConstraint.activate([
+            thirdRowStack.leadingAnchor.constraint(equalTo: numpadStack.leadingAnchor),
+            thirdRowStack.trailingAnchor.constraint(equalTo: numpadStack.trailingAnchor),
+            thirdRowStack.widthAnchor.constraint(equalTo: numpadStack.widthAnchor)
+            ])
+
+        
+
+        fourthRowStack.translatesAutoresizingMaskIntoConstraints = false
+        fourthRowStack.distribution = .fillEqually
+
+        NSLayoutConstraint.activate([
+            fourthRowStack.leadingAnchor.constraint(equalTo: numpadStack.leadingAnchor),
+            fourthRowStack.trailingAnchor.constraint(equalTo: numpadStack.trailingAnchor),
+            fourthRowStack.widthAnchor.constraint(equalTo: numpadStack.widthAnchor)
+            ])
+
+        
+        
+        fifthRowStack.translatesAutoresizingMaskIntoConstraints = false
+        fifthRowStack.distribution = .fillEqually
+
+        NSLayoutConstraint.activate([
+            fifthRowStack.leadingAnchor.constraint(equalTo: numpadStack.leadingAnchor),
+            fifthRowStack.trailingAnchor.constraint(equalTo: numpadStack.trailingAnchor),
+            fifthRowStack.widthAnchor.constraint(equalTo: numpadStack.widthAnchor)
+            ])
+        
     }
     
     
@@ -52,10 +181,13 @@ class ViewController: UIViewController {
     /*----------------------Main Function----------------------*/
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupLayout()
         inputTextView.textContainer.maximumNumberOfLines = 1
         inputTextView.invalidateIntrinsicContentSize()
         inputTextView.textContainer.lineBreakMode = .byTruncatingHead
         inputTextView.isScrollEnabled = true
+        
     }
     
     
